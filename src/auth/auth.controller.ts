@@ -1,5 +1,6 @@
-import { Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { AuthDTO } from './dto';
 @Controller('auth')
 export class AuthController {
   // auth service is automatically created when initializing the controller
@@ -8,14 +9,21 @@ export class AuthController {
   }
   // some requests from client
   @Post('register') //register a new user
-  register() {
+  // register(@Req() request: Request) {
+  register(@Body('') authDTO: AuthDTO) {
+    // authDTO's type must be a "DATA TRANSFER OBJECT" //DTO2037
+    // not validate using class-validator AND class-transformer
+    console.log(
+      `Email: ${authDTO.email} ${typeof authDTO.email}, Password: ${authDTO.password} ${typeof authDTO.password}`,
+    );
     // now controller call services
-    return this.authService.register();
+    // we need to validate email and password HERE
+    return this.authService.register(authDTO);
   }
 
   // POST: .../auth/login
   @Post('login') //register a new user
-  login() {
-    return this.authService.login();
+  login(@Body('') authDTO: AuthDTO) {
+    return this.authService.login(authDTO);
   }
 }

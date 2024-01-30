@@ -10,16 +10,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model User { //Tên thực thể trong prisma
   id Int @id @default(autoincrement())
-  email String
+  email String @unique
   hashedPassword String
-  firstName String
-  lastName String
+  firstName String? //can be null(optional)
+  lastName String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // relationship
+  notes Note[]
+
+  @@map("users") //users id "table's name" in Postgres SQL //tên bảng trong CSDL
 }
 
+// One user can "write" many notes
 model Note {
   id Int @id @default(autoincrement())
   title String
@@ -28,4 +34,9 @@ model Note {
   // other fields ...
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  // raltionship
+  userId Int //like "foreign key"
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("notes")
 }
