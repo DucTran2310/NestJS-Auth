@@ -13,9 +13,6 @@ export class AuthController {
   register(@Body('') authDTO: AuthDTO) {
     // authDTO's type must be a "DATA TRANSFER OBJECT" //DTO2037
     // not validate using class-validator AND class-transformer
-    console.log(
-      `Email: ${authDTO.email} ${typeof authDTO.email}, Password: ${authDTO.password} ${typeof authDTO.password}`,
-    );
     // now controller call services
     // we need to validate email and password HERE
     return this.authService.register(authDTO);
